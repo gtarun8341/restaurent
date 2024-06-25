@@ -3,14 +3,11 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const PublisherSignSchema = new schema(
 {
-    _id: String,
-    marketName: String,
-    picture: {
-           data: Buffer
-        },
-    email: String,
-    password: String,
-    confirmPassword: String,
+    marketName: { type: String, required: true },
+    picture: { type: String },  // Assuming picture is stored as filename
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    confirmPassword: { type: String, required: true }
 
     // posts: [{
   

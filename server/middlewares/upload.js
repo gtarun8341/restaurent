@@ -1,17 +1,14 @@
-// middlewares/upload.js
-import path from 'path';
+import { signPublisherModel } from '../models/PublisherSignModel.js';
 import multer from 'multer';
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Destination folder for uploaded files
     },
-    filename: (req, file, cb) => {
-        let ext = path.extname(file.originalname);
-        cb(null, Date.now() + ext);
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); // Unique filename for each upload
     }
 });
-
 const upload = multer({
     storage: storage,
     fileFilter: function(req, file, callback) {

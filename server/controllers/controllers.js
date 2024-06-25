@@ -8,12 +8,51 @@ import multer from 'multer';
 let pic;
 
 
-export const insertSignUpPublisherDataFromFront = async(req, res) => {
-    console.log('publisher signUpdata which will be inserted to the db'+req.body)
-    await signPublisherModel.insertMany(req.body)
-}
+export const insertSignUpPublisherDataFromFront = async (req, res) => {
+    try {
+        console.log('Publisher SignUp Data:', req.body);
+
+        const { marketName, email, password , confirmPassword } = req.body;
+
+        // Validate if required fields are present
+        if (!marketName || !email || !password) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        // Create a new publisher document in MongoDB
+        const newPublisher = await signPublisherModel.create({ marketName, email, password ,confirmPassword });
+
+        res.status(201).json({ message: 'Publisher sign-up data saved successfully', publisher: newPublisher });
+    } catch (error) {
+        console.error('Error saving publisher sign-up data:', error);
+        res.status(500).json({ message: 'Failed to save publisher sign-up data', error: error.message });
+    }
+};
 export default insertSignUpPublisherDataFromFront;
 
+export const insertSignInPublisherDataFromFront = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Find user by email
+        const user = await signPublisherModel.findOne({ email });
+
+        // If user not found or password doesn't match
+        if (!user || user.password !== password) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        // If credentials are correct, handle successful sign-in
+        // For example, generate JWT token and send it back to frontend
+        // Example:
+        // const token = generateToken(user); // You need to implement generateToken function
+        // res.json({ message: 'Sign in successful', token });
+        res.status(200).json({ message: 'Sign in successful' });
+    } catch (error) {
+        console.error('Error signing in:', error.message);
+        res.status(500).json({ message: 'Failed to sign in', error: error.message });
+    }
+};
 export const insertSignUpClientDataFromFront = async(req, res) => {
     console.log(req.body._id)
     await signClientModel.insertMany(req.body)
@@ -51,15 +90,16 @@ export const insertPic = async (req, res) => {
         console.log('Request file:', req.file);
 
         const { email, marketName, password, confirmPassword } = req.body;
-        const picture = req.file;
+        const picturen = req.file.filename;
+        console.log('File name:', picturen);
 
-        if (!picture) {
+        if (!picturen) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
         const updatedUser = await signPublisherModel.findOneAndUpdate(
             { email },
-            { $set: { picture: picture.filename, marketName, password, confirmPassword } },
+            { $set: { picture: picturen, marketName, password, confirmPassword } },
             { new: true }
         );
 

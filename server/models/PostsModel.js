@@ -6,9 +6,7 @@ const postsSchema = new schema({
     publisherName: String,
     title: String,
     price: String,
-    picture: {
-        data: Buffer
-    },
+    picture: String,
 
 })
 

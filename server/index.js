@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
 const connectToMongoose = async () => {
-    (await mongoose.connect("mongodb+srv://awab1hassan1ciu:awab1hassan1ciu@cluster0.cwhesro.mongodb.net/",{useNewUrlParser: true, useUnifiedTopology: true})
+    (await mongoose.connect("mongodb+srv://jinxforever8341:XTh0aGk4B04BrgD7@cluster0.8wynrga.mongodb.net/",{useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => app.listen(5000, () => console.log`connected sucessfully`))
     .catch((error) => 
         console.log(error.message)

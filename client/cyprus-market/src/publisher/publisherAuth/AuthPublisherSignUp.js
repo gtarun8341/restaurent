@@ -7,34 +7,42 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 function AuthPublisherSignUp() {
-    const [signUpData, setSignUpData] = useState({ _id: uuidv4(), marketName: '', picture: null, email: '', password: '', confirmPassword: '' });
+    const [signUpData, setSignUpData] = useState({
+        marketName: '',
+        picture: null, // Store the file object here
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
     const onSignUp = async () => {
         try {
             const formData = new FormData();
             formData.append('marketName', signUpData.marketName);
-            formData.append('picture', signUpData.picture);
+            formData.append('picture', signUpData.picture); // Append the file object
             formData.append('email', signUpData.email);
             formData.append('password', signUpData.password);
             formData.append('confirmPassword', signUpData.confirmPassword);
 
-            console.log('FormData to be sent:');
+            // Display FormData keys and values for debugging
             formData.forEach((value, key) => {
                 console.log(key, value);
             });
 
+            // Send FormData to backend for processing
             await axios.post('http://localhost:5000/api/endpoints/insertPic', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            console.log('SignUpData to be sent:', signUpData);
+            // Optionally, send other signUpData to another endpoint
             await axios.post('http://localhost:5000/api/endpoints/sendPublisherSignUpData', signUpData);
         } catch (error) {
             console.log(error.message);
         }
     };
+
 
     return (
         <Container>
